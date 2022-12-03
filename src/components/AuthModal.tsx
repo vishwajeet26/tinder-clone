@@ -4,7 +4,7 @@ interface AuthModalProps {
   setShowModal: Dispatch<SetStateAction<boolean>>;
   isSignUp: boolean
 }
-const AuthModal = ({ setShowModal, isSignUp }: AuthModalProps) => {
+const AuthModal:React.FC<AuthModalProps> = ({ setShowModal, isSignUp }) => {
   const [email, setEmail] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
   const [confirmPassword, setConfirmPassword] = useState<string | null>(null);
@@ -16,12 +16,12 @@ const AuthModal = ({ setShowModal, isSignUp }: AuthModalProps) => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     try {
-      if(isSignUp && (password !== confirmPassword)){
-        setError('Passwords need to match')
+      if (isSignUp && password !== confirmPassword) {
+        setError("Passwords need to match");
       }
-      console.log('make a post request to our database')
+      console.log("make a post request to our database");
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
   return (
@@ -55,14 +55,16 @@ const AuthModal = ({ setShowModal, isSignUp }: AuthModalProps) => {
           required={true}
           onChange={(e) => setPassword(e.target.value)}
         />
-       { isSignUp && <input
-          type="password"
-          id="password-check"
-          name="password-check"
-          placeholder="confirm password"
-          required={true}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />}
+        {isSignUp && (
+          <input
+            type="password"
+            id="password-check"
+            name="password-check"
+            placeholder="confirm password"
+            required={true}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+        )}
         <input className="secondary-button" type="submit" />
         <p>{error}</p>
       </form>
