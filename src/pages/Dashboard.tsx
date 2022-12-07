@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import TinderCard from "react-tinder-card";
 import ChatContainer from "../components/ChatContainer";
+import { useCookies } from "react-cookie";
 const db = [
   {
     name: "Richard Hendricks",
@@ -24,7 +26,40 @@ const db = [
   },
 ];
 
+export interface userProps {
+  user_id: any;
+  first_name: string;
+  dob_day: string;
+  dob_month: string;
+  dob_year: string;
+  show_gender: boolean;
+  gender_identity: string;
+  gender_interest: string;
+  url: string;
+  about: string;
+  matches: any[];
+}
+
 const Dashboard: React.FC = () => {
+
+  const [user, setUser] = useState<userProps>();
+  const [cookies, setCookie, removeCookie] = useCookies<any>(['user'])
+
+  const userId = cookies.UserId
+  const getUser = async() => {
+    try {
+      const response = await axios.get('http://localhost:8000/user', {
+        params: {userId}
+      })
+      setUser(response.data)
+    } catch(error){
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+      getUser();
+  }, [])
+
   const characters = db;
   const [lastDirection, setLastDirection] = useState<string>();
 
@@ -39,7 +74,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="dashboard">
-      <ChatContainer />
+      <ChatContainer user={user} />
       <div className="swiper-container">
         <div className="card-container">
           {characters.map((character) => (

@@ -19,17 +19,14 @@ const OnBoarding = () => {
     about: "",
     matches: [],
   });
-
   let navigate = useNavigate();
 
   const handleSubmit = async (e: any) => {
-    console.log("submitted");
     e.preventDefault();
     try {
       const response = await axios.put("http://localhost:8000/user", {
         formData,
       });
-      console.log(response);
       const success = response.status === 200;
       if (success) navigate("/dashboard");
     } catch (err) {
